@@ -111,6 +111,7 @@
           <span id="duration"> 可播放时长: 0s </span>
           <span id="time"> 进度：0s </span>
           <span id="performance"> 解码平均：0ms, 单元平均：0ms </span>
+          <span id="sei"> sei： </span>
         </div>
         <div class="btn">
           <button id="playBtn">播放</button>
@@ -132,8 +133,9 @@
         const $time = $("time");
         const $duration = $("duration");
         const $performance = $("performance");
+        const $sei = $("sei");
         const defautVideoUrl =
-          "https://ks3-cn-beijing.ksyun.com/ksplayer/h265/outside_demo/v1.1.3/720P2M30fpsh265-wasmtest.flv";
+          "http://demo-play.cg-dev2.cn/live/pc.flv";
         const videoWidth = 720;
         const videoHeight = 400;
 
@@ -146,7 +148,7 @@
           $canvas.style.width = videoWidth + "px";
           $canvas.style.height = videoHeight + "px";
           $("iUrl").value = defautVideoUrl;
-          $("iH265").checked = true;
+          $("iH265").checked = false;
           $("iIsLive").checked = true;
           $("iHasAudio").checked = true;
           $("iHasVideo").checked = true;
@@ -244,6 +246,10 @@
           player.on("performance", ({ averageDecodeCost, averageUnitDuration }) => {
             $performance.innerHTML =
               "解码平均:" + Math.floor(averageDecodeCost) + "ms, 单元平均:" + Math.floor(averageUnitDuration) + "ms";
+          });
+          player.on("seiInfo", (sei) => {
+            $sei.innerHTML = sei;
+            console.log(sei);
           });
         }
 

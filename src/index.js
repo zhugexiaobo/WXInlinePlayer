@@ -401,7 +401,7 @@ class WXInlinePlayer extends EventEmitter {
     this.emit("mediaInfo", mediaInfo);
   }
 
-  _onFrameHandler({ width, height, data }) {
+  _onFrameHandler({ width, height, timestamp, data }) {
     if (this.drawer) {
       //注意：
       //这里设置canvas(this.$container)的width和height属性，会指定绘制的真实分辨率。
@@ -411,6 +411,7 @@ class WXInlinePlayer extends EventEmitter {
 
       // console.log("this.width/height",this.width,this.height,"this.$container.width/height",this.$container.width,this.$container.height,"draw width/height",width, height);
       this.drawer.drawNextOutputPicture(width, height, data);
+      this.emit("timestamp", timestamp);
     }
   }
 

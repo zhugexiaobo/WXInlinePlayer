@@ -112,6 +112,11 @@
           <span id="time"> 进度：0s </span>
           <span id="performance"> 解码平均：0ms, 单元平均：0ms </span>
         </div>
+        <div class="state">
+          <span id="sei"> sei： </span>
+          <span id="pts"> pts： </span>
+          <span id="ts"> ts： </span>
+        </div>
         <div class="btn">
           <button id="playBtn">播放</button>
           <button id="stopBtn">停止</button>
@@ -132,10 +137,15 @@
         const $time = $("time");
         const $duration = $("duration");
         const $performance = $("performance");
+        const $sei = $("sei");
+        const $pts = $("pts");
+        const $ts = $("ts");
         const defautVideoUrl =
-          "https://ks3-cn-beijing.ksyun.com/ksplayer/h265/outside_demo/v1.1.3/720P2M30fpsh265-wasmtest.flv";
+          "http://demo-play.cg-dev2.cn/live/pc.flv";
         const videoWidth = 720;
         const videoHeight = 400;
+
+        const seiItems = [];
 
         //////////////main logic///////////////////////////////////////////////////////
 
@@ -146,7 +156,7 @@
           $canvas.style.width = videoWidth + "px";
           $canvas.style.height = videoHeight + "px";
           $("iUrl").value = defautVideoUrl;
-          $("iH265").checked = true;
+          $("iH265").checked = false;
           $("iIsLive").checked = true;
           $("iHasAudio").checked = true;
           $("iHasVideo").checked = true;
@@ -244,6 +254,26 @@
           player.on("performance", ({ averageDecodeCost, averageUnitDuration }) => {
             $performance.innerHTML =
               "解码平均:" + Math.floor(averageDecodeCost) + "ms, 单元平均:" + Math.floor(averageUnitDuration) + "ms";
+          });
+          player.on("seiInfo", (sei) => {
+            seiItems.push(sei);
+            console.log(seiItems);
+          });
+          player.on("timestamp", (ts) => {
+            $ts.innerHTML = ts;
+            if (seiItems.length) {
+              let sei = seiItems[0];
+              if (ts - sei.ts < 100 && ts - sei.ts > 0) {
+                let newDate = new Date();
+                newDate.setTime(sei.slice.substr(3));
+                $sei.innerHTML = newDate.toLocaleTimeString();
+                $pts.innerHTML = sei.ts;
+                seiItems.shift();
+              } else {
+                $sei.innerHTML = '';
+                $pts.innerHTML = '';
+              }
+            }
           });
         }
 

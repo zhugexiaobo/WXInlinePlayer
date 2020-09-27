@@ -226,11 +226,10 @@ void CodecFactor::_handleVideoTag(VideoTagValue &tag, uint32_t timestamp) {
             bridge["onSEIInfo"]({
               "slice": UTF8ToString($1),
               "orig": UTF8ToString($2),
-              "compositionTime": $3,
-              "ts": $4,
+              "ts": $3,
             });
           }
-        }, _codec->bridgeName.c_str(), sei->get_buf_ptr(), nalu->get_buf_ptr(), tag.compositionTime, timestamp);
+        }, _codec->bridgeName.c_str(), sei->get_buf_ptr(), nalu->get_buf_ptr(), tag.compositionTime+timestamp);
       }
 #endif
       nalus = make_shared<Buffer>(*nalus + *_mask + *nalu);

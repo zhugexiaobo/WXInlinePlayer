@@ -66,7 +66,26 @@
 
 ## 如何编译
 
-请确保你安装过[parcel](https://parceljs.org/) / [emscripten 1.38.45](https://github.com/emscripten-core/emscripten) / [cmake](https://cmake.org/) 以及 [make](http://www.gnu.org/software/make/)，然后执行以下命令即可：
+请确保你安装过[parcel](https://parceljs.org/) / [emscripten 1.38.45](https://github.com/emscripten-core/emscripten) / [cmake](https://cmake.org/) 以及 [make](http://www.gnu.org/software/make/)
+
+* 安装 emscripten 1.38.45
+```shell
+# Get the emsdk repo
+git clone https://github.com/emscripten-core/emsdk.git
+
+# Enter that directory
+cd emsdk
+
+# Download and install the latest SDK tools.
+./emsdk install 1.38.45-fastcomp
+
+# Make the "latest" SDK "active" for the current user. (writes .emscripten file)
+./emsdk activate 1.38.45-fastcomp
+
+# Activate PATH and other environment variables in the current terminal
+source ./emsdk_env.sh
+```
+* 然后执行以下命令即可：
 ```shell
 npm install # 初始化工程
 npm update # 更新工程有关的插件。如果网络错误，改用 cnpm update

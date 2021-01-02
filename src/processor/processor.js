@@ -473,6 +473,10 @@ class Processor extends EventEmitter {
 
         break;
       }
+      case 'seiInfo': {
+        this.emit('seiInfo', msg.data);
+        break;
+      }
       default: {
         break;
       }

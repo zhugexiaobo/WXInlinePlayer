@@ -180,7 +180,7 @@
         function getOptions() {
           let isH265 = $("iH265").checked;
           return {
-            asmUrl: "./prod." + (isH265 ? "h265" : "all") + ".asm.combine.js",
+            // asmUrl: "./prod." + (isH265 ? "h265" : "all") + ".asm.combine.js",
             wasmUrl: "./prod." + (isH265 ? "h265" : "all") + ".wasm.combine.js",
             url: $("iUrl").value,
             $container: $canvas,
@@ -257,21 +257,18 @@
           });
           player.on("seiInfo", (sei) => {
             seiItems.push(sei);
-            console.log(seiItems);
+            console.log(sei);
           });
           player.on("timestamp", (ts) => {
             $ts.innerHTML = ts;
             if (seiItems.length) {
               let sei = seiItems[0];
-              if (ts - sei.ts < 100 && ts - sei.ts > 0) {
+              if (ts - sei.ts < 500 && ts - sei.ts > 0) {
                 let newDate = new Date();
                 newDate.setTime(sei.slice.substr(3));
                 $sei.innerHTML = newDate.toLocaleTimeString();
                 $pts.innerHTML = sei.ts;
                 seiItems.shift();
-              } else {
-                $sei.innerHTML = '';
-                $pts.innerHTML = '';
               }
             }
           });

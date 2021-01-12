@@ -218,18 +218,16 @@ void CodecFactor::_handleVideoTag(VideoTagValue &tag, uint32_t timestamp) {
 #ifdef __EMSCRIPTEN__
       uint8_t nal_unit_type = (nalu->read_uint8(0) & 0x1F);
       if (nal_unit_type == 6) {
-        shared_ptr<Buffer> sei = make_shared<Buffer>(nalu->slice(19));
         EM_ASM({
           var isWorker = typeof importScripts == "function";
           var bridge = (isWorker ? self : window)[UTF8ToString($0)];
           if (bridge && typeof bridge["onSEIInfo"] == "function") {
             bridge["onSEIInfo"]({
-              "slice": UTF8ToString($1),
-              "orig": UTF8ToString($2),
-              "ts": $3,
+              "sei": UTF8ToString($1),
+              "ts": $2,
             });
           }
-        }, _codec->bridgeName.c_str(), sei->get_buf_ptr(), nalu->get_buf_ptr(), tag.compositionTime+timestamp);
+        }, _codec->bridgeName.c_str(), nalu->get_buf_ptr(), tag.compositionTime+timestamp);
       }
 #endif
       nalus = make_shared<Buffer>(*nalus + *_mask + *nalu);
